@@ -1,0 +1,16 @@
+/* App.css - Global styles for the main container */
+
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 1rem;
+  }
+}

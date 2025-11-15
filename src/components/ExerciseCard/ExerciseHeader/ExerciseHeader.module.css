@@ -1,0 +1,93 @@
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 2px solid #f0f0f0;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  border-radius: 8px;
+  position: relative;
+}
+
+.cardHeader:hover {
+  background: #f8f9fa;
+  transform: translateY(-2px);
+}
+
+.cardHeader.open {
+  border-bottom: 2px solid #667eea;
+  background: #f0f2f5;
+}
+
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.dateSection {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dateIcon {
+  font-size: 2rem;
+}
+
+.date {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.day {
+  font-size: 1rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.statsSection {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+  color: white;
+  min-width: 120px;
+}
+
+.statLabel {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  margin-bottom: 0.25rem;
+}
+
+.statNumber {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.arrow {
+  font-size: 1.5rem;
+  color: #667eea;
+  transition: transform 0.3s ease;
+  margin-left: 1rem;
+  flex-shrink: 0;
+}
+
+.arrowOpen {
+  transform: rotate(180deg);
+}
+

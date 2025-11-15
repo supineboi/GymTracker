@@ -1,0 +1,87 @@
+.exercisesSection {
+  margin-top: 0;
+  padding: 2rem;
+  animation: slideDown 0.3s ease-out;
+  overflow: hidden;
+}
+
+@keyframes slideDown {
+  from {
+    max-height: 0;
+    opacity: 0;
+    margin-top: 0;
+  }
+  to {
+    max-height: 2000px;
+    opacity: 1;
+    margin-top: 1rem;
+  }
+}
+
+.exercisesTitle {
+  font-size: 1.5rem;
+  color: #333;
+  margin: 0 0 1.5rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.exercisesList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.exerciseItem {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border-left: 4px solid #667eea;
+  transition: background 0.3s ease;
+}
+
+.exerciseItem:hover {
+  background: #f0f2f5;
+}
+
+.exerciseHeader {
+  margin-bottom: 1rem;
+}
+
+.exerciseName {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.exerciseDetails {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.detailLabel {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+}
+
+.detailValue {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #667eea;
+}
+

@@ -1,0 +1,102 @@
+.actionBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.addButton,
+.unitButton {
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-width: 150px;
+  width: 150px;
+  text-align: center;
+}
+
+.addButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.addButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+}
+
+.unitButton {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(245, 87, 108, 0.3);
+}
+
+.unitButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(245, 87, 108, 0.4);
+}
+
+.toggler {
+  padding: 1px 0px;
+  width: 90px;
+  background-color: #fff;
+  height: 31px;
+  border-radius: 15px;
+  display: flex;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  justify-content: space-between;
+}
+
+.toggler div {
+  padding: 3px;
+  font-weight: bold;
+  width: 25px;
+  height: 25px;
+  border-radius: 15px;
+  text-align: center;
+  align-self: flex-end;
+  box-shadow: 5px 5px white 3px;
+  cursor: pointer;
+}
+
+.togglerRotater {
+  transform: rotateZ(0deg);
+  transition: transform 0.5s ease;
+}
+
+.togglerRotater.togglerRotaterLeft {
+  transform: rotateZ(-90deg);
+}
+
+.togglerRotater.togglerRotaterRight {
+  transform: rotateZ(90deg);
+}
+
+.togglerActiveBtn {
+  background-color: #667eea;
+
+}
+
+.togglerInactiveBtn {
+  background-color: gainsboro ;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .actionBar {
+    flex-direction: column;
+  }
+
+  .addButton,
+  .unitButton {
+    width: 100%;
+  }
+}
+
