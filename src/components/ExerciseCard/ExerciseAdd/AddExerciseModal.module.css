@@ -1,45 +1,52 @@
-/* Backdrop - Dark overlay behind modal */
+/* Backdrop */
 .backdrop {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  animation: fadeIn 0.3s ease;
+  animation: fadeIn 0.25s ease;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
 }
 
-/* Modal Container */
+/* Modal container */
 .modal {
-  background: white;
-  border-radius: 16px;
   width: 90%;
-  max-width: 500px;
+  max-width: 600px;
   max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  height: min(90vh, 760px);
+  background: linear-gradient(135deg,
+      rgba(102, 126, 234, 0.95),
+      rgba(118, 75, 162, 0.95));
+  border-radius: 18px;
+  padding: 1rem 0 2rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
   animation: slideUp 0.3s ease;
+  color: white;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 @keyframes slideUp {
   from {
-    transform: translateY(50px);
+    transform: translateY(40px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -51,117 +58,284 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 2rem;
-  border-bottom: 2px solid #f0f0f0;
+  padding: 1.2rem 2rem 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  flex-shrink: 0;
 }
 
 .modalHeader h2 {
   margin: 0;
-  font-size: 1.5rem;
-  color: #333;
+  font-size: 1.4rem;
+  font-weight: 700;
 }
 
 .closeButton {
-  background: none;
+  background: rgba(255, 255, 255, 0.15);
   border: none;
-  font-size: 1.5rem;
-  color: #666;
+  font-size: 1.3rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
   cursor: pointer;
-  padding: 0.5rem;
-  line-height: 1;
-  border-radius: 4px;
-  transition: background 0.2s ease, color 0.2s ease;
+  color: white;
+  transition: 0.2s;
 }
 
 .closeButton:hover {
-  background: #f0f0f0;
-  color: #333;
+  background: rgba(255, 255, 255, 0.25);
 }
 
-/* Form Styles */
+/* Form */
 .form {
-  padding: 2rem;
-}
-
-.formGroup {
-  margin-bottom: 1.5rem;
-}
-
-.formGroup label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  color: #333;
-  font-size: 0.9rem;
-}
-
-.formGroup input,
-.formGroup select {
-  width: 100%;
-  padding: 0.75rem;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
-  box-sizing: border-box;
-}
-
-.formGroup input:focus,
-.formGroup select:focus {
-  outline: none;
-  border-color: #667eea;
-}
-
-.formRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  padding: 1.5rem 2rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   gap: 1rem;
 }
 
-/* Form Actions */
+.staticFields {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.exerciseList {
+  flex: 1;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.2);
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.45) transparent;
+  border-top-left-radius: 12px;
+}
+
+.exerciseList:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.exerciseList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.exerciseList::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 999px;
+}
+
+.exerciseList::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+}
+
+.exerciseList::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.noScroll {
+  overflow: hidden;
+}
+
+.exerciseBox {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 15px 15px;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  padding: 0 2rem;
+  gap: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.emptyStateIcon {
+  font-size: 3.5rem;
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+  animation: float 3s ease-in-out infinite;
+}
+
+.emptyStateText {
+  font-size: 1.1rem;
+  font-weight: 500;
+  max-width: 80%;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.emptyStateSubtext {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: -0.5rem;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.fullInput {
+  width: 94%;
+}
+
+/* Two-column rows */
+.formRow {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Read-only date box */
+.readOnlyBox {
+  padding: 0.85rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+  font-weight: 500;
+  text-align: center;
+  backdrop-filter: blur(3px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.excerciseAccordian {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px 0.85rem;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.excerciseAccordian :nth-child(2) {
+  display: flex;
+  align-items: center;
+}
+
+.addExerciseRow {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.addExerciseButton {
+  background: transparent;
+  border: 1px dashed rgba(255, 255, 255, 0.4);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+  width: 200px;
+  transition: background 0.2s ease, color 0.2s ease;
+  margin-top: 10px;
+}
+
+.addExerciseButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.selectInput {
+  appearance: none;
+  background-color: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
+  padding: 0.85rem 2.5rem 0.85rem 1rem;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  background-size: 1em;
+  width: 100%;
+  min-width: 100px;
+}
+
+.selectInput:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.selectInput:focus {
+  background-color: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+}
+
+.selectInput option {
+  background-color: #667eea;
+  color: white;
+  padding: 10px;
+}
+
+.formError {
+  color: #ffd0d0;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* Buttons */
 .formActions {
   display: flex;
   gap: 1rem;
-  margin-top: 2rem;
   justify-content: flex-end;
-}
-
-.cancelButton,
-.submitButton {
-  padding: 0.75rem 2rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  flex-shrink: 0;
 }
 
 .cancelButton {
-  background: #f0f0f0;
-  color: #666;
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+  border: none;
+  padding: 0.85rem 1.6rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
 }
 
 .cancelButton:hover {
-  background: #e0e0e0;
-  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.35);
 }
 
 .submitButton {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: white;
+  color: #5a4fdc;
+  padding: 0.9rem 1.8rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s ease, transform 0.15s;
 }
 
 .submitButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.35);
 }
 
-/* Responsive */
+/* Mobile */
 @media (max-width: 600px) {
   .modal {
-    width: 95%;
-    margin: 1rem;
+    padding-bottom: 2rem;
+    height: 95vh;
+    max-height: 95vh;
   }
 
   .formRow {
@@ -177,4 +351,3 @@
     width: 100%;
   }
 }
-

@@ -1,3 +1,4 @@
+import { arrow } from '../../../utils/emojis'
 import styles from './ExerciseHeader.module.css'
 
 const ExerciseHeader = ({ workoutDate, dayOfWeek, totalExercises, timeSpent, isOpen, onToggle }) => {
@@ -25,8 +26,8 @@ const ExerciseHeader = ({ workoutDate, dayOfWeek, totalExercises, timeSpent, isO
                     </div>
                 </div>
             </div>
-            <div className={`${styles.arrow} ${isOpen ? styles.arrowOpen : ''}`}>
-                ▼
+            <div className={`emojis ${isOpen ? 'arrowOpen' : ''}`}>
+                {arrow}
             </div>
         </div>
     )

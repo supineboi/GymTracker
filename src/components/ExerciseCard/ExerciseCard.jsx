@@ -2,22 +2,14 @@ import { useState, useMemo } from 'react'
 import styles from './ExerciseCard.module.css'
 import ExerciseHeader from './ExerciseHeader/ExerciseHeader'
 import ExerciseDetails from './ExerciseDetails/ExerciseDetails'
-import { convertExercise } from '../../utils/unitConverter'
+import { convertExercise, formattedDate } from '../../utils/unitConverter'
 
 const ExerciseCard = ({ entry, currentUnit = 'kg' }) => {
     const [isOpen, setIsOpen] = useState(false)
-    
-    const today = new Date(entry.dateOfExercise)
-    const workoutDate = today.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    })
-    const dayOfWeek = today.toLocaleDateString('en-US', {
-        weekday: 'long'
-    })
-    const totalExercises = 3
-    const timeSpent = "45 minutes"
+    const {
+        workoutDate, 
+        dayOfWeek
+    } = formattedDate(entry.dateOfExercise);
 
     const exercises = useMemo(() => {
         return convertExercise(entry.exercises, currentUnit)

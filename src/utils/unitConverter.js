@@ -27,3 +27,19 @@ export const convertExercise = (exerciseOrExercises, toUnit) => {
         : convertSingleExercise(exerciseOrExercises)
 }
 
+export const formattedDate = (date) => {
+    const today = date
+        ? new Date(date)
+        : new Date()
+
+    return {
+        workoutDate: today.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        }),
+        dayOfWeek: today.toLocaleDateString('en-US', {
+            weekday: 'long'
+        })
+    }
+}

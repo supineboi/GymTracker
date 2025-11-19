@@ -58,17 +58,6 @@
   backdrop-filter: blur(10px);
 }
 
-.arrow {
-  font-size: 1.5rem;
-  transition: transform 0.3s ease;
-  margin-left: 1rem;
-  opacity: 0.8;
-}
-
-.arrowOpen {
-  transform: rotate(180deg);
-}
-
 .details {
   max-height: 500px;
   overflow: hidden;

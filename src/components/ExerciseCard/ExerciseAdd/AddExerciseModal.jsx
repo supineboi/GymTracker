@@ -1,51 +1,135 @@
-import { useState } from 'react'
+import { useReducer, useState, useEffect } from 'react'
 import Portal from '../../Portal/Portal'
 import styles from './AddExerciseModal.module.css'
+import styles2 from "../../UI/FormInput.module.css";
+import { formattedDate } from '../../../utils/unitConverter'
+import FormInput from '../../UI/FormInput'
+import { arrow, cross } from '../../../utils/emojis';
+import { nanoid } from "nanoid";
 
-const AddExerciseModal = ({ isOpen, onClose, onAddExercise }) => {
-    const [exerciseName, setExerciseName] = useState('')
-    const [sets, setSets] = useState('')
-    const [reps, setReps] = useState('')
-    const [highestWeight, setHighestWeight] = useState('')
-    const [lowestWeight, setLowestWeight] = useState('')
-    const [unit, setUnit] = useState('kg')
+const initialEntry = {
+    unit: "kg",
+    timeTaken: "",
+    exercises: [
+        {
+            id: nanoid(),
+            name: "",
+            sets: "",
+            reps: "",
+            highestWeight: "",
+            lowestWeight: "",
+            isOpen: true
+        }
+    ]
+};
+
+function entryReducer(state, action) {
+    switch (action.type) {
+        case "SET_FIELD":
+            return { ...state, [action.field]: action.value };
+
+        case "UPDATE_EXERCISE":
+            return {
+                ...state,
+                exercises: state.exercises.map((ex, i) =>
+                    i === action.index ? { ...ex, [action.field]: action.value } : ex
+                )
+            };
+
+        case "ADD_EXERCISE":
+            const newExercises = [
+                ...state.exercises.map(e => ({
+                    ...e,
+                    isOpen: false
+                })),
+                {
+                    id: nanoid(),
+                    name: "",
+                    sets: "",
+                    reps: "",
+                    highestWeight: "",
+                    lowestWeight: "",
+                    isOpen: true
+                }
+            ];
+            return {
+                ...state,
+                exercises: newExercises
+            };
+
+        case "DELETE_EXERCISE":
+            return {
+                ...state,
+                exercises: state.exercises.filter((ex) => ex.id !== action.id)
+            };
+
+        case "TOGGLE_EXERCISE_OPEN":
+            return {
+                ...state,
+                exercises: state.exercises.map((ex) => {
+                    if (ex.id === action.id) {
+                        return { ...ex, isOpen: !ex.isOpen };
+                    }
+
+                    return { ...ex };
+                })
+            };
+
+        case "RESET":
+            return { ...initialEntry };
+
+        default:
+            return state;
+    }
+}
+
+const AddExerciseModal = ({ isOpen, onClose, currentUnit, onAddExercise }) => {
+    const {
+        workoutDate,
+        dayOfWeek
+    } = formattedDate();
+
+    const [formError, setFormError] = useState('Please complete the current exercise before adding another.');
+    const [entryState, dispatchEntry] = useReducer(entryReducer, initialEntry);
+
+    useEffect(() => {
+        dispatchEntry({
+            type: 'SET_FIELD',
+            field: 'unit',
+            value: currentUnit
+        })
+    }, [currentUnit])
+
+    const updateEntry = (field, value, index) => {
+        const parts = field.split('.');
+        const isNested = parts.length > 1;
+
+        dispatchEntry({
+            type: isNested ? 'UPDATE_EXERCISE' : 'SET_FIELD',
+            field: isNested ? parts[1] : parts[0],
+            value,
+            ...(isNested && { index })
+        });
+    };
 
     const handleSubmit = (e) => {
-        e.preventDefault()
+        e.preventDefault();
+        onAddExercise(entryState);
+        onClose();
+    };
 
-        const newExercise = {
-            name: exerciseName,
-            sets: parseInt(sets) || 0,
-            reps: parseInt(reps) || 0,
-            highestWeight: parseFloat(highestWeight) || 0,
-            lowestWeight: parseFloat(lowestWeight) || 0,
-            unit: unit
-        }
-
-        onAddExercise(newExercise)
-
-        setExerciseName('')
-        setSets('')
-        setReps('')
-        setHighestWeight('')
-        setLowestWeight('')
-        setUnit('kg')
-
-        onClose()
-    }
-
-    if (!isOpen) return null
+    if (!isOpen) return null;
 
     return (
         <Portal>
             <div className={styles.backdrop} onClick={onClose}>
-                <div 
-                    className={styles.modal} 
+                <div
+                    className={styles.modal}
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div className={styles.modalHeader}>
                         <h2>➕ Add New Exercise</h2>
-                        <button 
+                        <button
                             className={styles.closeButton}
                             onClick={onClose}
                             aria-label="Close modal"
@@ -55,101 +139,188 @@ const AddExerciseModal = ({ isOpen, onClose, onAddExercise }) => {
                     </div>
 
                     <form onSubmit={handleSubmit} className={styles.form}>
-                        <div className={styles.formGroup}>
-                            <label htmlFor="exerciseName">Exercise Name</label>
-                            <input
-                                type="text"
-                                id="exerciseName"
-                                value={exerciseName}
-                                onChange={(e) => setExerciseName(e.target.value)}
-                                placeholder="e.g., Bench Press"
-                                required
-                            />
-                        </div>
-
-                        <div className={styles.formRow}>
-                            <div className={styles.formGroup}>
-                                <label htmlFor="sets">Sets</label>
-                                <input
-                                    type="number"
-                                    id="sets"
-                                    value={sets}
-                                    onChange={(e) => setSets(e.target.value)}
-                                    placeholder="3"
-                                    min="1"
-                                    required
-                                />
+                        <div className={styles.staticFields}>
+                            {/* DATE */}
+                            <div className={styles2.formGroup}>
+                                <label>Today's Date</label>
+                                <div className={styles.readOnlyBox}>
+                                    {workoutDate} - {dayOfWeek}
+                                </div>
                             </div>
 
-                            <div className={styles.formGroup}>
-                                <label htmlFor="reps">Reps</label>
-                                <input
-                                    type="number"
-                                    id="reps"
-                                    value={reps}
-                                    onChange={(e) => setReps(e.target.value)}
-                                    placeholder="10"
-                                    min="1"
+                            {/* UNIT AND TIME SPENT */}
+                            <div className={styles.formRow}>
+                                <div className={styles2.formGroup}>
+                                    <label htmlFor="unit">Unit</label>
+                                    <select
+                                        id="unit"
+                                        className={styles.selectInput}
+                                        value={entryState.unit}
+                                        onChange={(e) => updateEntry("unit", e.target.value)}
+                                    >
+                                        <option value="kg">kg</option>
+                                        <option value="lbs">lbs</option>
+                                    </select>
+                                </div>
+                                <FormInput
+                                    allowOnly="integer"
+                                    label="Time Spent (in Mins)"
+                                    type="text"
+                                    id="timeSpent"
+                                    value={entryState.timeTaken}
+                                    onChange={(val) => updateEntry("timeTaken", val)}
+                                    placeholder="e.g., 45 or 120"
                                     required
                                 />
                             </div>
                         </div>
 
-                        <div className={styles.formRow}>
-                            <div className={styles.formGroup}>
-                                <label htmlFor="highestWeight">Highest Weight</label>
-                                <input
-                                    type="number"
-                                    id="highestWeight"
-                                    value={highestWeight}
-                                    onChange={(e) => setHighestWeight(e.target.value)}
-                                    placeholder="80"
-                                    min="0"
-                                    step="0.5"
-                                    required
-                                />
-                            </div>
+                        <div className={`${styles.exerciseList} ${entryState.exercises.length === 0 ? styles.noScroll : ''}`}>
+                            {
+                                entryState.exercises.length === 0 ? (
+                                    <div className={styles.emptyState}>
+                                        <div className={styles.emptyStateIcon}>💪</div>
+                                        <div className={styles.emptyStateText}>
+                                            Let's Get Moving!
+                                        </div>
+                                        <div className={styles.emptyStateSubtext}>
+                                            Add an exercise to start tracking your gains!
+                                        </div>
+                                    </div>
+                                ) : (
+                                    entryState.exercises.map((exercise, idx) => {
+                                        return (
+                                            <div key={exercise.id}>
+                                                <div className={styles.excerciseAccordian}>
+                                                    <div>
+                                                        {exercise.name || `Exercise ${idx + 1}`}
+                                                    </div>
+                                                    <div>
+                                                        <div
+                                                            className={`emojis ${exercise.isOpen ? 'arrowOpen' : ''}`}
+                                                            style={{ color: 'white' }}
+                                                            onClick={() => dispatchEntry({
+                                                                type: 'TOGGLE_EXERCISE_OPEN',
+                                                                id: exercise.id
+                                                            })}
+                                                        >
+                                                            {arrow}
+                                                        </div>
+                                                        <div
+                                                            className='emojis'
+                                                            style={{ color: 'white' }}
+                                                            onClick={() => dispatchEntry({
+                                                                type: 'DELETE_EXERCISE',
+                                                                id: exercise.id
+                                                            })}
+                                                        >
+                                                            {cross}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {
+                                                    exercise.isOpen ? (
+                                                        <div className={styles.exerciseBox}>
+                                                            {/* EXERCISE NAME */}
+                                                            <FormInput
+                                                                allowOnly="alpha"
+                                                                id={`exerciseName-${idx}`}
+                                                                type="text"
+                                                                classes={styles.fullInput}
+                                                                value={exercise.name}
+                                                                onChange={(val) => updateEntry("exercises.name", val, idx)}
+                                                                label="Exercise Name"
+                                                                // placeholder="e.g., Bench Press"
+                                                                placeholder={`Exercise - ${idx + 1}`}
+                                                                required
+                                                            />
 
-                            <div className={styles.formGroup}>
-                                <label htmlFor="lowestWeight">Lowest Weight</label>
-                                <input
-                                    type="number"
-                                    id="lowestWeight"
-                                    value={lowestWeight}
-                                    onChange={(e) => setLowestWeight(e.target.value)}
-                                    placeholder="60"
-                                    min="0"
-                                    step="0.5"
-                                    required
-                                />
-                            </div>
+                                                            {/* SETS + REPS */}
+                                                            <div className={styles.formRow}>
+                                                                <FormInput
+                                                                    allowOnly="integer"
+                                                                    label="Sets"
+                                                                    type="text"
+                                                                    id={`sets-${idx}`}
+                                                                    value={exercise.sets}
+                                                                    onChange={(val) => updateEntry("exercises.sets", val, idx)}
+                                                                    placeholder="3"
+                                                                    required
+                                                                />
+                                                                <FormInput
+                                                                    allowOnly="integer"
+                                                                    label="Reps"
+                                                                    type="text"
+                                                                    id={`reps-${idx}`}
+                                                                    value={exercise.reps}
+                                                                    onChange={(val) => updateEntry("exercises.reps", val, idx)}
+                                                                    placeholder="10"
+                                                                    required
+                                                                />
+                                                            </div>
+
+                                                            {/* WEIGHTS */}
+                                                            <div className={styles.formRow}>
+                                                                <FormInput
+                                                                    allowOnly="decimal"
+                                                                    label={`Highest Weight (${entryState.unit})`}
+                                                                    type="text"
+                                                                    id={`highestWeight-${idx}`}
+                                                                    value={exercise.highestWeight}
+                                                                    onChange={(val) => updateEntry("exercises.highestWeight", val, idx)}
+                                                                    placeholder="80"
+                                                                    required
+                                                                />
+                                                                <FormInput
+                                                                    allowOnly="decimal"
+                                                                    label={`Lowest Weight  (${entryState.unit})`}
+                                                                    type="text"
+                                                                    id={`lowestWeight-${idx}`}
+                                                                    value={exercise.lowestWeight}
+                                                                    onChange={(val) => updateEntry("exercises.lowestWeight", val, idx)}
+                                                                    placeholder="60"
+                                                                    required
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    ) : null
+                                                }
+                                            </div>
+                                        );
+                                    })
+                                )
+                            }
                         </div>
 
-                        <div className={styles.formGroup}>
-                            <label htmlFor="unit">Unit</label>
-                            <select
-                                id="unit"
-                                value={unit}
-                                onChange={(e) => setUnit(e.target.value)}
+                        <div className={styles.addExerciseRow}>
+                            {/* {formError ? <p className={styles.formError}>{formError}</p> : null} */}
+                            <button
+                                type="button"
+                                className={styles.addExerciseButton}
+                                onClick={() => {
+                                    dispatchEntry({
+                                        type: 'ADD_EXERCISE'
+                                    });
+                                }}
                             >
-                                <option value="kg">kg</option>
-                                <option value="lbs">lbs</option>
-                            </select>
+                                + Add Exercise
+                            </button>
                         </div>
 
+                        {/* BUTTONS */}
                         <div className={styles.formActions}>
-                            <button 
-                                type="button" 
+                            <button
+                                type="button"
                                 className={styles.cancelButton}
                                 onClick={onClose}
                             >
                                 Cancel
                             </button>
-                            <button 
-                                type="submit" 
+                            <button
+                                type="submit"
                                 className={styles.submitButton}
                             >
-                                Add Exercise
+                                Done
                             </button>
                         </div>
                     </form>
@@ -160,4 +331,3 @@ const AddExerciseModal = ({ isOpen, onClose, onAddExercise }) => {
 }
 
 export default AddExerciseModal
-

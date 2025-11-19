@@ -17,11 +17,11 @@ const Main = () => {
     }
 
     const handleCloseModal = () => {
-      setIsModalOpen(false)
+        setIsModalOpen(false)
     }
-  
+
     const handleAddExercise = (newExercise) => {
-      console.log('New exercise added:', newExercise)
+        console.log('New exercise added:', newExercise)
     }
 
     return <>
@@ -31,7 +31,7 @@ const Main = () => {
             onToggleUnit={handleToggleUnit}
         />
         {
-            DUMMY_ENTRIES.map( entry => (
+            DUMMY_ENTRIES.map(entry => (
                 <ExerciseCard entry={entry} currentUnit={currentUnit} />
             ))
         }
@@ -39,6 +39,7 @@ const Main = () => {
             isOpen={isModalOpen}
             onClose={handleCloseModal}
             onAddExercise={handleAddExercise}
+            currentUnit={currentUnit}
         />
     </>
 }

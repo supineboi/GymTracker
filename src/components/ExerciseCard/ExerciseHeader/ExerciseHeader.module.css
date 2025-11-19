@@ -78,16 +78,3 @@
   font-size: 1.5rem;
   font-weight: 700;
 }
-
-.arrow {
-  font-size: 1.5rem;
-  color: #667eea;
-  transition: transform 0.3s ease;
-  margin-left: 1rem;
-  flex-shrink: 0;
-}
-
-.arrowOpen {
-  transform: rotate(180deg);
-}
-
