@@ -156,10 +156,17 @@
 }
 
 .emptyStateIcon {
-  font-size: 3.5rem;
+  width: 80px;
+  height: 80px;
   margin-bottom: 0.5rem;
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
   animation: float 3s ease-in-out infinite;
+}
+
+.emptyStateIcon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .emptyStateText {

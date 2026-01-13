@@ -2,6 +2,7 @@ import { useState } from 'react'
 import styles from './Header.module.css'
 import { formattedDate } from '../../utils/unitConverter'
 import { arrow } from '../../utils/emojis';
+import AppLogo from '../AppLogo/AppLogo';
 
 const Header = () => {
     const { workoutDate, dayOfWeek } = formattedDate();
@@ -18,9 +19,12 @@ const Header = () => {
                 onClick={toggleAccordion}
             >
                 <div className={styles.headerContent}>
-                    <h1 className={styles.title}>💪 Gym Tracker</h1>
+                    <div className={styles.titleContainer}>
+                        <AppLogo/>
+                        <h1 className={styles.title}>Track To Fit</h1>
+                    </div>
                     <p className={styles.subtitle}>Track your workouts and progress!</p>
-                    <p className={styles.description}>An Ultimate Gym Tracker App that wants you to get stronger!</p>
+                    <p className={styles.description}>An Ultimate Fitness App that wants you to get stronger!</p>
                     <div className={styles.date}>📅 {workoutDate} - {dayOfWeek}</div>
                 </div>
                 <div className={`emojis ${isOpen ? 'arrowOpen' : ''}`}>

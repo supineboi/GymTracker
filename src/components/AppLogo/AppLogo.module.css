@@ -1,0 +1,46 @@
+/* Outer wrapper */
+.wrapper {
+  display: inline-flex;
+  height: 50px;
+  width: 50px;
+  padding: 18px 22px;
+  border-radius: 55px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+  margin-bottom: 15px;
+  background: linear-gradient(90deg, #667eea 0% 50%, #f093fb 50% 100%);
+}
+
+/* Logo container */
+.logo {
+  display: flex;
+  font-weight: 900;
+  font-size: 68px;
+  font-family: "Poppins", sans-serif;
+  align-items: flex-start;
+}
+
+/* Base style for all letters */
+.logo span {
+  background-image:
+    linear-gradient(145deg, #667eea 0% 50%, #f093fb 50% 100%);
+  background-size: 100% 100%;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 1px #ffffff;
+  text-shadow:0 0 70px rgba(255, 255, 255, 0.9),
+    0 5px 30px rgba(0,0,0,0.45);
+}
+
+/* Merge second T into first T */
+.t2 {
+  margin-left: -0.42em;
+}
+
+/* F slightly lower + aligned to T bar */
+.f {
+  margin-left: -0.35em;
+  margin-top: 0.16em;
+  transform: translateY(3px);
+}

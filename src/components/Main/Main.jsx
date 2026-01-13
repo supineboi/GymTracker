@@ -32,7 +32,7 @@ const Main = () => {
         />
         {
             DUMMY_ENTRIES.map(entry => (
-                <ExerciseCard entry={entry} currentUnit={currentUnit} />
+                <ExerciseCard key={entry.id} entry={entry} currentUnit={currentUnit} />
             ))
         }
         <AddExerciseModal

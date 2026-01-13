@@ -22,7 +22,7 @@ const ExerciseHeader = ({ workoutDate, dayOfWeek, totalExercises, timeSpent, isO
                     </div>
                     <div className={styles.stat}>
                         <span className={styles.statLabel}>Time at Gym</span>
-                        <span className={styles.statNumber}>{timeSpent}</span>
+                        <span className={styles.statNumber}>{timeSpent}m</span>
                     </div>
                 </div>
             </div>

@@ -1,34 +1,40 @@
+import { useState } from "react";
 import styles from "./FormInput.module.css";
+import { getValidationError, validateType } from "../../utils/formFieldsValidators";
 
 const FormInput = ({
   label,
   type = "text",
-  allowOnly,
   value,
   onChange,
   placeholder = "",
   id,
+  limitRange,
+  allowedType = 'text',
   classes
 }) => {
-  const validationHandler = (val) => {
+  const [error, setError] = useState();
+
+  const blurHandler = (val, type, range) => {
+    const errorMsg = getValidationError(val, type, range);
+
+    if(errorMsg){
+      setError(errorMsg)
+    }
+  }
+
+  const changeHandler = (val, type) => {
+    setError("");
+
     if (val === "" || val.trim() === "") {
       onChange("");
       return;
     }
 
-    const patterns = {
-      decimal: /^\d*\.?\d*$/,
-      integer: /^\d+$/,
-      alpha: /^[A-Za-z ]+$/
-    };
-
-    const regex = patterns[allowOnly];
-
-    if (!regex || regex.test(val)) {
+    if(validateType(val, type)){
       onChange(val);
     }
-  };
-
+  }
 
   return (
     <div className={styles.formGroup}>
@@ -39,12 +45,18 @@ const FormInput = ({
           id={id}
           type={type}
           value={value}
-          onChange={(e) => validationHandler(e.target.value)}
+          onBlur={(e) => blurHandler(e.target.value, allowedType, limitRange)}
+          onChange={(e) => changeHandler(e.target.value, allowedType)}
           placeholder={placeholder}
           {...classes ? { className: classes } : {}}
         />
-        {/* <span className={styles.formErrorMsg}>
-          please enter correct one.</span> */}
+        {
+          error && (
+            <span className={styles.formErrorMsg}>
+              {error}
+            </span>
+          )
+        }
       </div>
     </div>
   );

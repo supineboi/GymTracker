@@ -26,11 +26,28 @@
   flex: 1;
 }
 
+.titleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
 .title {
-  margin: 0 0 0.5rem 0;
+  margin: 0;
   font-size: 2.8rem;
   font-weight: 700;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(145deg, #667eea 0% 50%, #f093fb 50% 100%);
+  padding: 0 25px;
+  border-radius: 30px;
 }
 
 .subtitle {
@@ -115,4 +132,3 @@
     opacity: 1;
   }
 }
-

@@ -2,7 +2,7 @@ export const DUMMY_ENTRIES = [
     {
       id: "ex-001",
       dateOfExercise: "2025-01-10",
-      timeTaken: "58m",
+      timeTaken: "58",
       exercises: [
         {
           name: "Bench Press",
@@ -34,7 +34,7 @@ export const DUMMY_ENTRIES = [
     {
       id: "ex-002",
       dateOfExercise: "2025-01-12",
-      timeTaken: "43m",
+      timeTaken: "43",
       exercises: [
         {
           name: "Squats",
@@ -58,7 +58,7 @@ export const DUMMY_ENTRIES = [
     {
       id: "ex-003",
       dateOfExercise: "2025-01-15",
-      timeTaken: "66m",
+      timeTaken: "66",
       exercises: [
         {
           name: "Bench Press",
@@ -98,7 +98,7 @@ export const DUMMY_ENTRIES = [
     {
       id: "ex-004",
       dateOfExercise: "2025-01-18",
-      timeTaken: "37m",
+      timeTaken: "37",
       exercises: [
         {
           name: "Overhead Press",
@@ -130,7 +130,7 @@ export const DUMMY_ENTRIES = [
     {
       id: "ex-005",
       dateOfExercise: "2025-01-22",
-      timeTaken: "72m",
+      timeTaken: "72",
       exercises: [
         {
           name: "Deadlift",

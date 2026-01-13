@@ -6,6 +6,7 @@ import { formattedDate } from '../../../utils/unitConverter'
 import FormInput from '../../UI/FormInput'
 import { arrow, cross } from '../../../utils/emojis';
 import { nanoid } from "nanoid";
+import AppLogo from '../../AppLogo/AppLogo';
 
 const initialEntry = {
     unit: "kg",
@@ -18,7 +19,8 @@ const initialEntry = {
             reps: "",
             highestWeight: "",
             lowestWeight: "",
-            isOpen: true
+            isOpen: true,
+            invalidFields: []
         }
     ]
 };
@@ -89,7 +91,7 @@ const AddExerciseModal = ({ isOpen, onClose, currentUnit, onAddExercise }) => {
         dayOfWeek
     } = formattedDate();
 
-    const [formError, setFormError] = useState('Please complete the current exercise before adding another.');
+    const [isFromValid, setIsFormValid] = useState(true);
     const [entryState, dispatchEntry] = useReducer(entryReducer, initialEntry);
 
     useEffect(() => {
@@ -112,8 +114,15 @@ const AddExerciseModal = ({ isOpen, onClose, currentUnit, onAddExercise }) => {
         });
     };
 
+    const validateForm = () => {
+        return entryState.exercises.some(e => {
+            return Object.values(e).some(v => !v)
+        })
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
+
         onAddExercise(entryState);
         onClose();
     };
@@ -163,13 +172,13 @@ const AddExerciseModal = ({ isOpen, onClose, currentUnit, onAddExercise }) => {
                                     </select>
                                 </div>
                                 <FormInput
-                                    allowOnly="integer"
                                     label="Time Spent (in Mins)"
                                     type="text"
                                     id="timeSpent"
                                     value={entryState.timeTaken}
                                     onChange={(val) => updateEntry("timeTaken", val)}
                                     placeholder="e.g., 45 or 120"
+                                    allowedType='int'
                                     required
                                 />
                             </div>
@@ -179,7 +188,9 @@ const AddExerciseModal = ({ isOpen, onClose, currentUnit, onAddExercise }) => {
                             {
                                 entryState.exercises.length === 0 ? (
                                     <div className={styles.emptyState}>
-                                        <div className={styles.emptyStateIcon}>💪</div>
+                                        <div className={styles.emptyStateIcon}>
+                                            <AppLogo/>
+                                        </div>
                                         <div className={styles.emptyStateText}>
                                             Let's Get Moving!
                                         </div>
@@ -223,36 +234,38 @@ const AddExerciseModal = ({ isOpen, onClose, currentUnit, onAddExercise }) => {
                                                         <div className={styles.exerciseBox}>
                                                             {/* EXERCISE NAME */}
                                                             <FormInput
-                                                                allowOnly="alpha"
                                                                 id={`exerciseName-${idx}`}
                                                                 type="text"
                                                                 classes={styles.fullInput}
                                                                 value={exercise.name}
                                                                 onChange={(val) => updateEntry("exercises.name", val, idx)}
                                                                 label="Exercise Name"
-                                                                // placeholder="e.g., Bench Press"
                                                                 placeholder={`Exercise - ${idx + 1}`}
+                                                                allowedType='text'
+                                                                limitRange={[3, 40]}
                                                                 required
                                                             />
 
                                                             {/* SETS + REPS */}
                                                             <div className={styles.formRow}>
                                                                 <FormInput
-                                                                    allowOnly="integer"
                                                                     label="Sets"
                                                                     type="text"
                                                                     id={`sets-${idx}`}
                                                                     value={exercise.sets}
+                                                                    allowedType='int'
+                                                                    limitRange={[1, 10]}
                                                                     onChange={(val) => updateEntry("exercises.sets", val, idx)}
                                                                     placeholder="3"
                                                                     required
                                                                 />
                                                                 <FormInput
-                                                                    allowOnly="integer"
                                                                     label="Reps"
                                                                     type="text"
                                                                     id={`reps-${idx}`}
                                                                     value={exercise.reps}
+                                                                    allowedType='int'
+                                                                    limitRange={[1, 30]}
                                                                     onChange={(val) => updateEntry("exercises.reps", val, idx)}
                                                                     placeholder="10"
                                                                     required
@@ -262,21 +275,23 @@ const AddExerciseModal = ({ isOpen, onClose, currentUnit, onAddExercise }) => {
                                                             {/* WEIGHTS */}
                                                             <div className={styles.formRow}>
                                                                 <FormInput
-                                                                    allowOnly="decimal"
                                                                     label={`Highest Weight (${entryState.unit})`}
                                                                     type="text"
                                                                     id={`highestWeight-${idx}`}
                                                                     value={exercise.highestWeight}
                                                                     onChange={(val) => updateEntry("exercises.highestWeight", val, idx)}
                                                                     placeholder="80"
+                                                                    allowedType='float'
+                                                                    limitRange={[1, 999]}
                                                                     required
                                                                 />
                                                                 <FormInput
-                                                                    allowOnly="decimal"
                                                                     label={`Lowest Weight  (${entryState.unit})`}
                                                                     type="text"
                                                                     id={`lowestWeight-${idx}`}
                                                                     value={exercise.lowestWeight}
+                                                                    allowedType='float'
+                                                                    limitRange={[1, 999]}
                                                                     onChange={(val) => updateEntry("exercises.lowestWeight", val, idx)}
                                                                     placeholder="60"
                                                                     required
@@ -293,15 +308,27 @@ const AddExerciseModal = ({ isOpen, onClose, currentUnit, onAddExercise }) => {
                         </div>
 
                         <div className={styles.addExerciseRow}>
-                            {/* {formError ? <p className={styles.formError}>{formError}</p> : null} */}
+                            {!isFromValid ? <p className={styles.formError}>
+                                {`Please complete the current exercise${entryState.exercises.length > 1 ?
+                                    's' : ''
+                                    } before adding another.`}
+                            </p> : null}
                             <button
                                 type="button"
-                                className={styles.addExerciseButton}
+                                className={`${styles.addExerciseButton}
+                                     ${!isFromValid ? 'not-allowed' : ''}
+                                `}
                                 onClick={() => {
-                                    dispatchEntry({
-                                        type: 'ADD_EXERCISE'
-                                    });
+                                    if (validateForm()) {
+                                        setIsFormValid(true);
+                                        dispatchEntry({
+                                            type: 'ADD_EXERCISE'
+                                        });
+                                    } else {
+                                        setIsFormValid(false);
+                                    }
                                 }}
+                                disabled={!isFromValid}
                             >
                                 + Add Exercise
                             </button>
